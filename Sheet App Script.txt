@@ -1,0 +1,22 @@
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sayfa1");
+
+    //  veri kaydı yapılıyor...
+    sheet.appendRow([
+      data.name,        // A Sütununa yazılacak
+      data.title,       // B Sütununa yazılacak
+      data.linkedinUrl, // C Sütununa yazılacak
+      new Date(),       // D Sütununa yazılacak
+      data.email        // E Sütununa yazılacak
+    ]);
+
+    return ContentService.createTextOutput(JSON.stringify({ "status": "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    Logger.log(error);
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
