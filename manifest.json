@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "LinkedIn Executive Assistant",
+  "name": "Executive Assistant for LinkedIn",
   "version": "1.0",
   "description": "Saves LinkedIn profiles with one click. Created by @BuminCode",
   "permissions": ["activeTab", "scripting"],
