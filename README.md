@@ -1,4 +1,4 @@
-# LinkedIn Executive Assistant 👔
+# Executive-Assistant-for-LinkedIn 👔
 
 **Created by @BuminCode**
 
