@@ -77,7 +77,7 @@ Tebrikler! 🎉 Eklenti tarayıcınıza yüklendi.
 
 ## 📖 Nasıl Kullanılır?
 
-1.  Herhangi bir **LinkedIn kullanıcı profiline** gidin.
+1.  Herhangi bir **LinkedIn kullanıcı profiline** gidin ve iletişim bilgileri kısmına tıklayın.
 2.  Tarayıcınızın sağ üstündeki yapboz parçasına tıklayıp **LinkedIn Executive Assistant** ikonuna basın.
 3.  Açılan pencerede **"Save Profile"** butonuna tıklayın.
 4.  Buton yeşil renge dönüp "Saved Successfully" dediğinde, veriler Google Tablonuza eklenmiş olacaktır.
