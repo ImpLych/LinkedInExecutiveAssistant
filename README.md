@@ -1,59 +1,89 @@
-# LinkedIn Executive Assistant (Chrome Extension)
+# LinkedIn Executive Assistant 👔
 
-**Created by Bumin Code**
+**Created by @BuminCode**
 
-Bu proje, LinkedIn profillerindeki verileri (İsim, Unvan, Şirket, E-posta) tek bir tıklamayla toplayıp, otomatik olarak sizin belirlediğiniz bir Google E-Tablosuna (Google Sheets) kaydeden bir Chrome tarayıcı eklentisidir.
+Bu proje, LinkedIn profillerindeki önemli verileri (İsim, Unvan, Şirket, E-posta) otomatik olarak "kazıyan" (scraping) ve bunları yapılandırılmış bir şekilde Google Sheets (E-Tablolar) veritabanına kaydeden bir Chrome Tarayıcı Eklentisidir.
+
+İşe alım süreçleri, satış potansiyeli oluşturma (lead generation) ve network takibi için manuel veri girişini ortadan kaldırmak amacıyla geliştirilmiştir.
 
 ![Project Icon](icon.png)
 
-## 🌟 Özellikler
+## 🛠 Kullanılan Teknolojiler
 
-- **Tek Tıkla Veri Çekme:** LinkedIn profil sayfasındayken butona basıldığında verileri okur.
-- **Google Sheets Entegrasyonu:** Veriler anlık olarak bulut tablonuza eklenir.
-- **Modern UI:** CSS animasyonları ve Glassmorphism tasarımı.
-- **Toplanan Veriler:**
-  - İsim Soyisim
-  - Unvan (Title)
-  - Şirket Adı
-  - E-posta (Eğer profilde herkese açıksa)
-  - Profil Linki (URL)
-  - İşlem Tarihi
+Bu proje geliştirilirken aşağıdaki teknolojiler kullanılmıştır:
 
-## 🛠 Kurulum ve Yapılandırma
+- **Frontend:** HTML5, CSS3 (Modern Animasyonlar & Glassmorphism)
+- **Logic:** JavaScript (ES6+), Chrome Extension Manifest V3 API
+- **Backend:** Google Apps Script (Serverless Function)
+- **Database:** Google Sheets (Bulut Veritabanı)
+- **İletişim:** Fetch API (POST İstekleri)
 
-Bu projeyi kendi bilgisayarınızda çalıştırmak için **Backend (Google Sheets)** ve **Frontend (Chrome Extension)** olmak üzere iki aşamalı kurulum yapmanız gerekir.
+---
 
-### Adım 1: Google Sheets (Backend) Kurulumu
+## ⚖️ Yasal Uyarı (Disclaimer)
 
-Verilerin kaydedileceği veritabanını oluşturmak için:
+Bu proje tamamen **eğitim ve kişisel gelişim amaçlı** (Chrome Eklentisi mimarisi ve API entegrasyonlarını öğrenmek için) geliştirilmiştir.
+
+- Bu yazılım resmi bir LinkedIn ürünü değildir ve LinkedIn ile herhangi bir bağlantısı yoktur.
+- **Kullanıcı Sorumluluğu:** Bu aracı kullanarak yapılan veri toplama işlemlerinden, LinkedIn Kullanım Koşulları'na (Terms of Service) aykırı kullanımlardan veya oluşabilecek hesap kısıtlamalarından tamamen **kullanıcı sorumludur.**
+- **Gizlilik:** Bu eklenti hiçbir kişisel veriyi geliştiriciye (Bumin Code) göndermez. Tüm veriler kullanıcının kendi tanımladığı Google E-Tablosunda saklanır.
+- Yazılım "olduğu gibi" (as-is) sunulmuştur ve herhangi bir garanti içermez.
+
+---
+
+## 🚀 Kurulum Rehberi
+
+Bu projeyi kendi bilgisayarınızda çalıştırmak için hem bir veritabanı (Google Sheets) oluşturmalı hem de eklentiyi tarayıcınıza yüklemelisiniz. Aşağıdaki adımları sırasıyla uygulayınız.
+
+### 1. Adım: Google Sheets (Veritabanı) Kurulumu
+
+Eklentinin verileri kaydedeceği yeri ayarlamamız gerekiyor.
 
 1.  Yeni bir [Google E-Tablosu (Sheets)](https://sheets.google.com) oluşturun.
-2.  Sayfanın altındaki sekme adının `Sayfa1` olduğundan emin olun.
+2.  Alt kısımdaki sayfa isminin **`Sayfa1`** olduğundan emin olun (Script bu isme göre çalışır).
 3.  Üst menüden **Uzantılar (Extensions) > Apps Script** seçeneğine tıklayın.
-4.  Açılan kod editöründeki her şeyi silin ve aşağıdaki kodu yapıştırın:
+4.  Açılan kod editöründeki her şeyi silin ve proje dosyaları içindeki `SheetAppScript.txt` dosyasında bulunan kodu kopyalayıp buraya yapıştırın.
+5.  Sol üstteki **Kaydet (💾)** butonuna basın.
+6.  Sağ üstteki **Dağıt (Deploy) > Yeni Dağıtım (New Deployment)** butonuna tıklayın.
+7.  Sol taraftaki çark simgesinden **Web Uygulaması (Web App)** seçeneğini seçin.
+8.  **Şu ayarları aynen yapın (Çok Önemli):**
+    - **Açıklama:** LinkedIn Bot
+    - **Çalıştırma Farklı (Execute as):** _Kendim (Me)_
+    - **Erişimi olanlar (Who has access):** **_Herkes (Anyone)_** -> _(Bunu seçmezseniz eklenti çalışmaz)_
+9.  **Dağıt** butonuna basın ve Google erişim izinlerini onaylayın.
+10. İşlem sonunda size verilen **Web App URL**'ini kopyalayın.
 
-```javascript
-function doPost(e) {
-  try {
-    var data = JSON.parse(e.postData.contents);
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sayfa1");
+### 2. Adım: Projeyi Yapılandırma
 
-    // Veri kaydı yapılıyor...
-    sheet.appendRow([
-      data.name, // A Sütunu: İsim
-      data.title, // B Sütunu: Unvan
-      data.linkedinUrl, // C Sütunu: Profil Linki
-      new Date(), // D Sütunu: Tarih
-      data.email, // E Sütunu: E-posta
-    ]);
+Kendi veritabanı linkinizi eklentiye tanıtmanız gerekiyor.
 
-    return ContentService.createTextOutput(
-      JSON.stringify({ status: "success" })
-    ).setMimeType(ContentService.MimeType.JSON);
-  } catch (error) {
-    return ContentService.createTextOutput(
-      JSON.stringify({ status: "error", message: error.toString() })
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
-}
-```
+1.  Bu repoyu bilgisayarınıza indirin (Code > Download ZIP).
+2.  Klasördeki `popup.js` dosyasını bir kod editörü (VS Code, Notepad++ vb.) ile açın.
+3.  En üstteki satırı bulun: `const WEB_APP_URL = "..."`
+4.  Tırnak işaretlerinin içine 1. Adımda kopyaladığınız linki yapıştırın.
+    - _Örnek:_ `const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";`
+5.  Dosyayı kaydedin.
+
+### 3. Adım: Chrome'a Yükleme
+
+1.  Google Chrome'da adres çubuğuna `chrome://extensions/` yazın.
+2.  Sağ üst köşedeki **Geliştirici Modu (Developer Mode)** anahtarını açın.
+3.  Sol üstteki **Paketlenmemiş öğe yükle (Load Unpacked)** butonuna tıklayın.
+4.  İndirdiğiniz proje klasörünü seçin.
+
+Tebrikler! 🎉 Eklenti tarayıcınıza yüklendi.
+
+---
+
+## 📖 Nasıl Kullanılır?
+
+1.  Herhangi bir **LinkedIn kullanıcı profiline** gidin.
+2.  Tarayıcınızın sağ üstündeki yapboz parçasına tıklayıp **LinkedIn Executive Assistant** ikonuna basın.
+3.  Açılan pencerede **"Save Profile"** butonuna tıklayın.
+4.  Buton yeşil renge dönüp "Saved Successfully" dediğinde, veriler Google Tablonuza eklenmiş olacaktır.
+
+---
+
+## 📄 Lisans
+
+Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
